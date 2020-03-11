@@ -1,35 +1,4 @@
-export const emoticons = {
-    laughing: "E+1",
-    happy: "E+2",
-    indifferent: "E+3",
-    sad: "E+4",
-    surprised: "E+5",
-    tongue: "E+6",
-    winking: "E+7",
-    sick: "E+8",
-    mad: "E+9",
-    upset: "E+0",
-    meh: "E+U",
-    chocolate_ice_cream: "E+W",
-    strawberry_ice_cream: "E+Q",
-    pizza: "E+Z",
-    cake: "E+K",
-    popcorn: "E+O",
-    coffee: "E+C",
-    igloo: "E+I",
-    puffle: "E+P",
-    sun: "E+D",
-    moon: "E+N",
-    game: "E+G",
-    shamrock: "E+L",
-    flower: "E+F",
-    heart: "E+H",
-    question: "/",
-    exclamation: "1",
-    light_bulb: "E+B",
-    coin: "E+M",
-    toot: "E+T",
-};
+import { emoticons } from "./emotes.js";
 
 export function interpret(source) {
     var blocks = source.split("\n\n");
@@ -40,7 +9,8 @@ export function interpret(source) {
         return (/^[^a-z]*$/).test(str);
     };
 
-    const sceneHeaders = /EXT. |INT. /;
+    const sceneHeaders = /EXT|INT/;
+    const transitions = /FADE|CUT/;
 
     Array.prototype.clone = function () {
         return this.slice(0);
@@ -57,6 +27,11 @@ export function interpret(source) {
             } else {
                 statements[l].content = content[0].toUpperCase();
             };
+        } else
+        // If Transition
+        if (content.length === 1 && isUpperCase(content[0]) && transitions.test(content[0].toUpperCase())) {
+            statements[l].type = "transition";
+            statements[l].content = content[0].toUpperCase();
         } else
         // If Emoticon
         if (content.length > 1 && isUpperCase(content[0]) && content[1].startsWith("*") && content[1].endsWith("*") && emoticons.hasOwnProperty(content[1].substr(1, content[1].length - 1).toLowerCase().split(" ").slice(0, -1).toString().replace(/ /g, "_"))) {

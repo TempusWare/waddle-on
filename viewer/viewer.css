@@ -1,0 +1,84 @@
+body {
+    margin: 0px;
+}
+#viewer-box {
+    height: inherit;
+    overflow: auto;
+    table-layout: fixed;
+    scrollbar-width: thin;
+}
+#viewer-box::-webkit-scrollbar {
+    width: 6px;
+    background-color: #F0F0F0;
+}
+#viewer-box::-webkit-scrollbar-thumb {
+    background-color: #CDCDCD;
+}
+ul {
+    margin: 0;
+    padding: 0;
+}
+#viewer-container {
+    background-color: #f0ede3;
+}
+#viewer-lines {
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+#viewer-lines li {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    color: #006699;
+    font-family: "Helvetica", "Arial";
+    list-style: none;
+}
+li.heading {
+    font-weight: bold;
+    text-align: center;
+}
+li.transition {
+    font-weight: bold;
+    text-align: right;
+}
+li.emoticon {
+    font-weight: bold;
+}
+li.emoticon div {
+    margin: 5px;
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+}
+li.emoticon img {
+    height: 1.5em;
+}
+li.emoticon span {
+    margin-left: 5px;
+}
+li.dialogue {
+    font-weight: bold;
+    text-align: left;
+    transition: .1s;
+}
+li.dialogue:hover {
+    background-color: #FCFCFA;
+    cursor: pointer;
+}
+li.dialogue:active {
+    background-color: #E5E2DA;
+}
+li.title {
+    text-align: center;
+    font-weight: bold;
+}
+li.action {
+    text-align: center;
+    font-style: italic;
+}
+li#end {
+    margin-top: 10px;
+    text-align: center;
+    font-weight: bold;
+};
