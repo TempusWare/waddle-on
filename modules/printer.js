@@ -6,6 +6,17 @@ export function print(script, viewer, location) {
         viewer.removeChild(viewer.firstChild);
     };
 
+    // Get array of characters
+    var charactersList = [];
+    for (const set in script) {
+        if (script.hasOwnProperty(set)) {
+            const line = script[set];
+            if ((line.type === "dialogue" || line.type === "emoticon") && !charactersList.includes(line.name)) {
+                charactersList.push(line.name);
+            };
+        };
+    };
+
     for (const set in script) {
         if (script.hasOwnProperty(set)) {
             const line = script[set];
@@ -44,12 +55,14 @@ export function print(script, viewer, location) {
                     
                     //item.innerHTML += "(" + emoticons[line.content] + ")";
                     item.classList.add("emoticon");
+                    item.classList.add("character-" + (charactersList.indexOf(line.name) + 1));
                     viewer.appendChild(item);
                     break;
 
                 case "dialogue":
                     item.innerHTML = "<u>" + line.name + ":</u><br>" + line.content[0];
                     item.classList.add("dialogue");
+                    item.classList.add("character-" + (charactersList.indexOf(line.name) + 1));
                     // Create and add more list items if there are more than 1 lines
                     if (line.content.length > 1) {
                         item.innerHTML += " (CONT'D)"; // Add "CONT'D" text if the dialogue continues further
@@ -72,6 +85,7 @@ export function print(script, viewer, location) {
                                 temp.remove();
                             });
                             newItem.classList.add("dialogue");
+                            newItem.classList.add("character-" + (charactersList.indexOf(line.name) + 1));
                             viewer.appendChild(newItem);
                         };
                     } else {

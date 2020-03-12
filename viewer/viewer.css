@@ -33,6 +33,17 @@ ul {
     color: #006699;
     font-family: "Helvetica", "Arial";
     list-style: none;
+    /*user-select: none;*/
+}
+li.highlighted {
+    background-color: #D5E9ED !important;
+}
+li.highlighted:hover {
+    background-color: #DEF3F7 !important;
+    cursor: pointer;
+}
+li.highlighted:active {
+    background-color: #C7DADD !important;
 }
 li.heading {
     font-weight: bold;

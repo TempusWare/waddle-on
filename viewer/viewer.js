@@ -1,4 +1,3 @@
-import { interpret } from "../modules/interpreter.js";
 import { print } from "../modules/printer.js";
 
 const scriptViewer = document.getElementById("viewer-lines");
@@ -20,6 +19,30 @@ if (scriptData != "") {
                 document.title = line.content[0] + " | " + document.title;
                 break;
             };
+        };
+    };
+
+    // Add highlight
+    window.addEventListener("keydown", function() {highlight(event)});
+    var initNum = 0;
+    function highlight(event) {
+        var num = event.key;
+        // Reset highlighted lines
+        if (initNum != 0 || (num == 0 && initNum != 0)) {
+            var highlighted = document.getElementsByClassName("character-" + initNum);
+            for (let i = 0; i < highlighted.length; i++) {
+                const item = highlighted[i];
+                item.classList.remove("highlighted");
+            };
+        };
+
+        if (!isNaN(num) && num >= 1 && num <= 9 && document.getElementsByClassName("character-" + num).length > 0) {
+            var highlighted = document.getElementsByClassName("character-" + num);
+            for (let i = 0; i < highlighted.length; i++) {
+                const item = highlighted[i];
+                item.classList.add("highlighted");
+            };
+            initNum = num;
         };
     };
 } else {
