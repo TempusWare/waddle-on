@@ -1,10 +1,32 @@
 body {
     margin: 5px;
-    background-color: black;
+    background-color: #71C5FF;
+    background-image: url("./interface/background-greyscale.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+h1 {
+    text-align: center;
+    font-family: "Helvetica", "Arial", sans-serif;
+    display: none;
+}
+h2 {
+    font-family: "Helvetica", "Arial", sans-serif;
+    margin: 0;
+    color: white;
+}
+#logo-container {
+    text-align: center;
+    
+}
+#logo-container img {
+    width: 100%;
+    max-width: 600px;
 }
 #containers, #tools {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
 }
 .containers {
     width: 500px;
@@ -19,6 +41,7 @@ body {
     resize: none;
     scrollbar-width: thin;
     border: 0;
+    padding: 10px;
 }
 #text-editor::-webkit-scrollbar {
     width: 6px;
@@ -27,52 +50,55 @@ body {
 #text-editor::-webkit-scrollbar-thumb {
     background-color: #CDCDCD;
 }
-/** {
-    box-sizing: border-box;
+#format {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
 }
-#container {
-    min-width: 50%;
-    max-width: 800px;
-    height: 100%;
-    margin: 0 auto;
+#format > table {
+    margin: 5px;
 }
-#editor {
-    float: left;
-    width: 50%;
-    height: 100%;
-    background-color: red;
-}
-#preview {
-    float: right;
-    width: 50%;
-    height: 100%;
-    background-color: blue;
-}
-#text-editor {
-    width: 100%;
-    height: 100%;
-    resize: none;
-    font-size: large;
-    border: 0;
-    margin: 0;
-}
-#text-editor_container, #script {
-    height: auto;
-}
-th {
+#markup {
+    max-width: 600px;
     font-family: "Helvetica", "Arial", sans-serif;
-    background-color: #050505;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    color: #FAFAFA;
-    height: 30px;
-}*/
-
-
-/*th {
-    color: black;
-    font-family: "Helvetica", "Arial";
-    border-top: 2px solid black;
-    border-bottom: 2px solid black;
-    width: 100%;
-}*/
+    background-color: #fafafa;
+}
+#emotes {
+    max-width: 500px;
+    font-family: "Helvetica", "Arial", sans-serif;
+    background-color: #FAFAEB;
+}
+#markup th {
+    background-color: #E5E5E5;
+}
+#emotes th {
+    background-color: #E2E2D7;
+}
+#markup td, #markup th, #emotes td, #emotes th {
+    padding: 0.2em;
+    /*border: 1px solid black*/
+}
+.syntax-type {
+    background-color: #f2f2f2;
+    text-align: center;
+    font-weight: bold;
+}
+.syntax-example {
+    background-color: #f2f2f2;
+    font-family: "Courier New";
+    font-weight: bold;
+}
+#emotes-list td {
+    word-break: break-all;
+    text-align: center;
+}
+.emotes-heading-icon {
+    width: 10%
+}
+.emotes-heading-keyword {
+    width: 23.333%
+}
+.emotes-image {
+    background-color: #EFEFE1;
+}

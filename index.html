@@ -6,6 +6,11 @@
         <link rel="stylesheet" href="editor.css">
     </head>
     <body>
+        <h1>#WaddleOnRewritten</h1>
+        <div id="logo-container">
+            <img src="./interface/logo.svg" alt="#WaddleOn Script Editor">
+            <h2>Script Editor</h2>
+        </div>
         <div>
             <div id="containers">
                 <div class="containers" id="editor-container">
@@ -24,9 +29,136 @@
             </div>
 
             <div id="tools">
+                <input type="checkbox" id="replace-case-toggle" title="Toggle case-sensitivity for Find & Replace">
+                <button class="buttons" id="replace-button">Find & Replace</button>
+                <button class="buttons" id="undo-fnr-button">Undo F&R</button>
                 <input type="checkbox" id="auto-preview-toggle" title="Toggle Auto Preview (Live updating script preview)">
                 <button class="buttons" id="preview-button">Preview</button>
                 <button class="buttons" id="convert-button">Convert</button>
+                <input type="checkbox" id="auto-save-toggle" title="Toggle Auto Save (Keeps your script in the browser after it closes)">
+                <button class="buttons" id="save-button">Save</button>
+            </div>
+
+            <div id="format">
+                <table id="markup">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Syntax</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="3" style="text-align:center;">Leave an empty line between each block. <a href="./interface/example-script.txt">(Example)</a></td>
+                        </tr>
+                    </tbody>
+                    <thead>
+                        <tr>
+                            <th style="width:20%">Type</th>
+                            <th style="width:40%">Method</th>
+                            <th style="width:40%">Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="syntax-type">Scene Heading (Room/Location)</td>
+                            <td>Begin with <b>INT</b> (interior) or <b>EXT</b> (exterior). Type in <b>FULL CAPITALS</b>. Force a Scene Heading by starting with a full stop.</td>
+                            <td class="syntax-example">EXT. PLAZA</td>
+                        </tr>
+                        <tr>
+                            <td class="syntax-type">Transition (Scene change/opening indication)</td>
+                            <td>Type <b>FADE IN:</b> or <b>CUT TO:</b> in <b>FULL CAPITALS</b>.</td>
+                            <td class="syntax-example">CUT TO:</td>
+                        </tr>
+                        <tr>
+                            <td class="syntax-type">Emoticon</td>
+                            <td>Begin with character name in <b>FULL CAPITALS</b>, then emoticon keyword (see table) and the word 'emote' or 'face' inside two asterisks.</td>
+                            <td class="syntax-example">TREE ⏎<br>*indifferent face*</td>
+                        </tr>
+                        <tr>
+                            <td class="syntax-type">Title & Credit</td>
+                            <td>Use <b>FULL CAPITALS</b> for the title, then 'by' and your name/pseudonym.</td>
+                            <td class="syntax-example">SURVIVAL SURFER ⏎<br>by Tempus</td>
+                        </tr>
+                        <tr>
+                            <td class="syntax-type">Dialogue Piece (Lines/Messages)</td>
+                            <td>Begin with character name in <b>FULL CAPITALS</b>, then lines of dialogue.<br>Dialogue can be broken up into separate messages with a single line break. Break up the dialogue if it's many words/sentences long.</td>
+                            <td class="syntax-example">DOUBLE AGENT ⏎<br>Yes, Herbert? ⏎<br>I've infiltrated the EPF headquarters...</td>
+                        </tr>
+                        <tr>
+                            <td class="syntax-type">Action Piece (Description of an event)</td>
+                            <td>Just type!</td>
+                            <td class="syntax-example">Shadow Guy chases the robber.</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table id="emotes">
+                    <thead>
+                        <tr>
+                            <th colspan="6">Emotes</th>
+                        </tr>
+                        <tr>
+                            <th class="emotes-heading-icon">Icon</th>
+                            <th class="emotes-heading-keyword">Keyword</th>
+                            <th class="emotes-heading-icon">Icon</th>
+                            <th class="emotes-heading-keyword">Keyword</th>
+                            <th class="emotes-heading-icon">Icon</th>
+                            <th class="emotes-heading-keyword">Keyword</th>
+                        </tr>
+                    </thead>
+                    <tbody id="emotes-list">
+                        <tr>
+                            <td class="emotes-image"><img src="./emotes/laughing.png"></td><td>laughing</td>
+                            <td class="emotes-image"><img src="./emotes/light_bulb.png"></td><td>light_bulb</td>
+                            <td class="emotes-image"><img src="./emotes/laughing.png"></td><td>moon</td>
+                        </tr>
+                        <tr>
+                            <td class="emotes-image"><img src="./emotes/happy.png"></td><td>happy</td>
+                            <td class="emotes-image"><img src="./emotes/coffee.png"></td><td>coffee</td>
+                            <td class="emotes-image"><img src="./emotes/popcorn.png"></td><td>popcorn</td>
+                        </tr>
+                        <tr>
+                            <td class="emotes-image"><img src="./emotes/indifferent.png"></td><td>indifferent</td>
+                            <td class="emotes-image"><img src="./emotes/sun.png"></td><td>sun</td>
+                            <td class="emotes-image"><img src="./emotes/puffle.png"></td><td>puffle</td>
+                        </tr>
+                        <tr>
+                            <td class="emotes-image"><img src="./emotes/sad.png"></td><td>sad</td>
+                            <td class="emotes-image"><img src="./emotes/flower.png"></td><td>flower</td>
+                            <td class="emotes-image"><img src="./emotes/strawberry_ice_cream.png"></td><td>strawberry_ice_cream</td>
+                        </tr>
+                        <tr>
+                            <td class="emotes-image"><img src="./emotes/surprised.png"></td><td>surprised</td>
+                            <td class="emotes-image"><img src="./emotes/game.png"></td><td>game</td>
+                            <td class="emotes-image"><img src="./emotes/toot.png"></td><td>toot</td>
+                        </tr>
+                        <tr>
+                            <td class="emotes-image"><img src="./emotes/tongue.png"></td><td>tongue</td>
+                            <td class="emotes-image"><img src="./emotes/heart.png"></td><td>heart</td>
+                            <td class="emotes-image"><img src="./emotes/meh.png"></td><td>meh</td>
+                        </tr>
+                        <tr>
+                            <td class="emotes-image"><img src="./emotes/winking.png"></td><td>winking</td>
+                            <td class="emotes-image"><img src="./emotes/igloo.png"></td><td>igloo</td>
+                            <td class="emotes-image"><img src="./emotes/chocolate_ice_cream.png"></td><td>chocolate_ice_cream</td>
+                        </tr>
+                        <tr>
+                            <td class="emotes-image"><img src="./emotes/sick.png"></td><td>sick</td>
+                            <td class="emotes-image"><img src="./emotes/cake.png"></td><td>cake</td>
+                            <td class="emotes-image"><img src="./emotes/pizza.png"></td><td>pizza</td>
+                        </tr>
+                        <tr>
+                            <td class="emotes-image"><img src="./emotes/mad.png"></td><td>mad</td>
+                            <td class="emotes-image"><img src="./emotes/shamrock.png"></td><td>shamrock</td>
+                            <td class="emotes-image"><img src="./emotes/exclamation.png"></td><td>exclamation</td>
+                        </tr>
+                        <tr>
+                            <td class="emotes-image"><img src="./emotes/upset.png"></td><td>upset</td>
+                            <td class="emotes-image"><img src="./emotes/coin.png"></td><td>coin</td>
+                            <td class="emotes-image"><img src="./emotes/question.png"></td><td>question</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
         <script type="module" src="main.js"></script>

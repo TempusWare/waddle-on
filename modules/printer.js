@@ -64,7 +64,7 @@ export function print(script, viewer, location) {
                             };
                             newItem.addEventListener("click", function() {
                                 let temp = document.createElement("textarea");
-                                temp.value = line.content[0];
+                                temp.value = line.content[m];
                                 temp.id = "temp";
                                 document.body.appendChild(temp);
                                 temp.select();
