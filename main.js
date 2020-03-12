@@ -6,13 +6,13 @@ const scriptViewer = document.getElementById("viewer-lines");
 const scriptViewerBox = document.getElementById("viewer-box");
 const replaceCaseToggle = document.getElementById("replace-case-toggle");
 const autoPreviewToggle = document.getElementById("auto-preview-toggle");
-const autoSaveToggle = document.getElementById("auto-save-toggle");
+//const autoSaveToggle = document.getElementById("auto-save-toggle");
 
 document.getElementById("replace-button").addEventListener("click", replace);
 document.getElementById("undo-fnr-button").addEventListener("click", undoFNR);
 document.getElementById("preview-button").addEventListener("click", preview);
 document.getElementById("convert-button").addEventListener("click", convert);
-document.getElementById("save-button").addEventListener("click", function() {save(); alert("Your script has been saved to your browser.\nIt'll automatically open in the editor next time you open this tool.")});
+//document.getElementById("save-button").addEventListener("click", function() {save(); alert("Your script has been saved to your browser.\nIt'll automatically open in the editor next time you open this tool.")});
 
 var caseSensitive = true;
 var backupScript = "";
@@ -71,16 +71,16 @@ function replaceCaseCheck() {
     };
 };
 
-autoSaveToggle.checked = true;
+/*autoSaveToggle.checked = true;
 autoSaveCheck();
 autoSaveToggle.addEventListener("click", autoSaveCheck)
 function autoSaveCheck() {
     if (autoSaveToggle.checked) {
-        setInterval(save, 5000);
+        setInterval(save, 3000);
     } else {
         clearInterval(save);
     };
-};
+};*/
 
 function autopreview() {
     preview();
@@ -119,17 +119,22 @@ function convert() {
     document.execCommand("copy");
     temp.remove();
 
-    // Open and use tinyurl
-    window.open("https://tinyurl.com/create.php?url=" + url);
+    let useTinyurl = confirm("A link to access the script exclusively via the online viewer has been saved to your clipboard.\n\nTo generate a shortened link that will fit in a Discord message, press OK and you'll be taken to an auto-generated TinyURL result.\nIf you want to do it manually, press Cancel.");
 
-    alert("A link to access the script exclusively via the viewer has been saved to your clipboard.\nIf a tinyurl-generated link didn't open in your browser, use a link shortener like bit.ly to shorten the link in your clipboard into a link that can be shared via Discord.")
+    if (useTinyurl) {
+        // Open and use tinyurl
+        window.open("https://tinyurl.com/create.php?url=" + url);
+    };
+    
 };
 
+textEditor.addEventListener("keyup", save);
 function save() {
     localStorage.setItem("backup", textEditor.value);
 };
 // Import backup if available
-if (localStorage["backup"]) {
+if (localStorage["backup"] && localStorage.getItem("backup") != "") {
     textEditor.value = localStorage.getItem("backup");
+    //console.log("Imported backup");
     preview();
 };
