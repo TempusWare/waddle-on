@@ -91,11 +91,17 @@ function autopreview() {
     };
 };
 
-if (textEditor != "") {preview()};
-
+preview();
 function preview() {
-    var script = interpret(textEditor.value);
-    print(script, scriptViewer, "home");
+    if (textEditor.value != "") {
+        var script = interpret(textEditor.value);
+        print(script, scriptViewer, "home");
+    } else {
+        // Clear script viewer
+        while (scriptViewer.hasChildNodes()) {
+            scriptViewer.removeChild(scriptViewer.firstChild);
+        };
+    };
 };
 
 function convert() {
