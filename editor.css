@@ -53,7 +53,7 @@ h2 {
 #format {
     display: flex;
     justify-content: center;
-    align-items: center;
+    /*align-items: center;*/
     flex-wrap: wrap;
 }
 #format > table {
@@ -65,7 +65,7 @@ h2 {
     background-color: #fafafa;
 }
 #emotes {
-    max-width: 500px;
+    max-width: 600px;
     font-family: "Helvetica", "Arial", sans-serif;
     background-color: #FAFAEB;
 }

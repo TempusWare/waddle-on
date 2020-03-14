@@ -8,11 +8,39 @@ const replaceCaseToggle = document.getElementById("replace-case-toggle");
 const autoPreviewToggle = document.getElementById("auto-preview-toggle");
 //const autoSaveToggle = document.getElementById("auto-save-toggle");
 
+document.getElementById("uppercase-button").addEventListener("click", function() {tocase("upper")});
+document.getElementById("lowercase-button").addEventListener("click", function() {tocase("lower")});
 document.getElementById("replace-button").addEventListener("click", replace);
 document.getElementById("undo-fnr-button").addEventListener("click", undoFNR);
 document.getElementById("preview-button").addEventListener("click", preview);
 document.getElementById("convert-button").addEventListener("click", convert);
 //document.getElementById("save-button").addEventListener("click", function() {save(); alert("Your script has been saved to your browser.\nIt'll automatically open in the editor next time you open this tool.")});
+
+function tocase(newcase) {
+    let startPos = textEditor.selectionStart;
+    let endPos = textEditor.selectionEnd;
+    if (startPos == endPos) {
+        alert("No text was selected!");
+        return;
+    };
+    let script = textEditor.value;
+    let selection = script.slice(startPos, endPos);
+    switch (newcase) {
+        case "upper":
+            var newSelection = selection.toUpperCase();
+            break;
+    
+        case "lower":
+            var newSelection = selection.toLowerCase();
+            break;
+    };
+    //console.log(startPos + ", " + endPos + " '" + selection + "'");
+    let preSelection = script.slice(0, startPos);
+    let postSelection = script.slice(endPos, script.length);
+    textEditor.value = preSelection + newSelection + postSelection;
+    preview();
+    save();
+};
 
 var caseSensitive = true;
 var backupScript = "";
@@ -30,6 +58,7 @@ function replace() {
         textEditor.value = textEditor.value.replace(regex, replaceText);
 
         preview();
+        save();
     } else if (findText != null) {
         alert("You didn't enter any text to find!");
     };
@@ -43,6 +72,7 @@ function undoFNR() {
             textEditor.value = backupScript;
             backupScript = "";
             preview();
+            save();
         };
     } else {
         alert("You haven't used Find & Replace!");

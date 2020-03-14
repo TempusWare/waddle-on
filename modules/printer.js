@@ -17,65 +17,43 @@ export function print(script, viewer, location) {
         };
     };
 
+    // Test for emoticon line as dialogue
+    function isEmoticon(line) {
+        return (line.startsWith("*") && line.endsWith("*") && emoticons.hasOwnProperty(line.substr(1, line.length - 1).toLowerCase().split(" ").slice(0, -1).toString().replace(/ /g, "_")));
+    };
+
     for (const set in script) {
         if (script.hasOwnProperty(set)) {
             const line = script[set];
-            let item = document.createElement("li");
             switch (line.type) {
-                case "heading":
+                case "heading": {
+                    let item = document.createElement("li");
                     item.innerHTML = line.content;
                     item.classList.add("heading");
                     viewer.appendChild(item);
-                    break;
+                } break;
 
-                case "transition":
+                case "transition": {
+                    let item = document.createElement("li");
                     item.innerHTML = line.content;
                     item.classList.add("transition");
                     viewer.appendChild(item);
-                    break;
+                } break;
 
-                case "emoticon":
-                    item.innerHTML = "<u>" + line.name + ":</u><br>";
-                    //item.innerHTML += "insert " + line.content + " emote (" + emoticons[line.content] + ")";
-                    let div = document.createElement("div");
-                    item.appendChild(div);
-                    let img = document.createElement("img");
-                    switch (location) {
-                        case "home":
-                            img.src = "./emotes/" + line.content + ".png";
-                            break;
-                        case "sibling":
-                            img.src = "../emotes/" + line.content + ".png";
-                            break;
-                    };
-                    div.appendChild(img);
-                    let span = document.createElement("span");
-                    span.innerHTML = "(" + emoticons[line.content] + ")";
-                    div.appendChild(span);
-                    
-                    //item.innerHTML += "(" + emoticons[line.content] + ")";
-                    item.classList.add("emoticon");
-                    item.classList.add("character-" + (charactersList.indexOf(line.name) + 1));
-                    viewer.appendChild(item);
-                    break;
+                case "dialogue": {
+                    for (let m = 0; m < line.content.length; m++) {
+                        let item = document.createElement("li");
+                        let content = line.content[m];
 
-                case "dialogue":
-                    item.innerHTML = "<u>" + line.name + ":</u><br>" + line.content[0];
-                    item.classList.add("dialogue");
-                    item.classList.add("character-" + (charactersList.indexOf(line.name) + 1));
-                    // Create and add more list items if there are more than 1 lines
-                    if (line.content.length > 1) {
-                        item.innerHTML += " (CONT'D)"; // Add "CONT'D" text if the dialogue continues further
-                        //item.title = item.content[0];
-                        viewer.appendChild(item);
-                        for (let m = 1; m < line.content.length; m++) {
-                            //const message = array[m];
-                            let newItem = document.createElement("li");
-                            newItem.innerHTML = line.content[m];
-                            if (m + 1 < line.content.length) { // Add "CONT'D" text if the dialogue continues further
-                                newItem.innerHTML += " (CONT'D)";
-                            };
-                            newItem.addEventListener("click", function() {
+                        if (m === 0) { // First line
+                            item.innerHTML = "<u>" + line.name + ":</u><br>";/* + line.content[0]*/
+                        };
+
+                        // If dialogue
+                        if (!isEmoticon(content)) { 
+                            item.classList.add("dialogue");
+                            item.innerHTML += "&emsp;" + content;
+                            item.addEventListener("click", function() {
                                 let temp = document.createElement("textarea");
                                 temp.value = line.content[m];
                                 temp.id = "temp";
@@ -84,35 +62,74 @@ export function print(script, viewer, location) {
                                 document.execCommand("copy");
                                 temp.remove();
                             });
-                            newItem.classList.add("dialogue");
-                            newItem.classList.add("character-" + (charactersList.indexOf(line.name) + 1));
-                            viewer.appendChild(newItem);
+
+                            // Add 'continued' text if the dialogue continues further
+                            /*if (m > 0) {
+                                item.innerHTML = "(CONT'D) " + item.innerHTML;
+                            };*/
+                        } 
+
+                        // If emoticon
+                        else {
+                            item.classList.add("emoticon");
+                            let div = document.createElement("div");
+                            item.appendChild(div);
+                            let img = document.createElement("img");
+                            var emote = content.substr(1, content.length - 1).toLowerCase().split(" ").slice(0, -1).toString().replace(/ /g, "_")
+                            switch (location) {
+                                case "home":
+                                    img.src = "./emotes/" + emote + ".png";
+                                    break;
+                                case "sibling":
+                                    img.src = "../emotes/" + emote + ".png";
+                                    break;
+                            };
+                            div.appendChild(img);
+                            let span = document.createElement("span");
+                            span.innerHTML = "(" + emoticons[emote] + ")";
+                            div.appendChild(span);
+                            if (m === 0) { // Emoticon on first line
+                                div.classList.add("first");
+                            };
+                            if (m + 1 < line.content.length) { // Continues further
+                                let arrowSpan = document.createElement("span");
+                                arrowSpan.innerHTML = ("↓ ↓ ↓");
+                                arrowSpan.classList.add("down");
+                                div.appendChild(arrowSpan);
+                                
+                                item.addEventListener("mouseover", function() {
+                                    arrowSpan.style.opacity = "1";
+                                });
+
+                                item.addEventListener("mouseout", function() {
+                                    arrowSpan.style.opacity = "0";
+                                });
+                            };
+
+                            // Add 'continued' text if the dialogue continues further
+                            /*if (m > 0) {
+                                span.innerHTML += " (CONT'D)";
+                            };*/
                         };
-                    } else {
+
+                        item.classList.add("character-" + (charactersList.indexOf(line.name) + 1));
                         viewer.appendChild(item);
                     };
-                    item.addEventListener("click", function() {
-                        let temp = document.createElement("textarea");
-                        temp.value = line.content[0];
-                        temp.id = "temp";
-                        document.body.appendChild(temp);
-                        temp.select();
-                        document.execCommand("copy");
-                        temp.remove();
-                    });
-                    break;
+                } break;
 
-                case "title":
+                case "title": {
+                    let item = document.createElement("li");
                     item.innerHTML = "<b>" + line.content[0].toUpperCase() + "</b><br>" + line.content[1];
                     item.classList.add("title");
                     viewer.appendChild(item);
-                    break;
+                } break;
 
-                case "action":
+                case "action": {
+                    let item = document.createElement("li");
                     item.innerHTML = line.content.join("<br>");
                     item.classList.add("action");
                     viewer.appendChild(item);
-                    break;
+                } break;
             
                 default:
                     break;

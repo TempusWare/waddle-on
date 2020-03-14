@@ -33,12 +33,6 @@ export function interpret(source) {
             statements[l].type = "transition";
             statements[l].content = content[0].toUpperCase();
         } else
-        // If Emoticon
-        if (content.length > 1 && isUpperCase(content[0]) && content[1].startsWith("*") && content[1].endsWith("*") && emoticons.hasOwnProperty(content[1].substr(1, content[1].length - 1).toLowerCase().split(" ").slice(0, -1).toString().replace(/ /g, "_"))) {
-            statements[l].type = "emoticon";
-            statements[l].name = content[0];
-            statements[l].content = content[1].substr(1, content[1].length - 1).toLowerCase().split(" ").slice(0, -1).toString();
-        } else
         // If Title & Credit
         if (content.length === 2 && isUpperCase(content[0]) && content[1].toLowerCase().startsWith("by ")) {
             statements[l].type = "title";
