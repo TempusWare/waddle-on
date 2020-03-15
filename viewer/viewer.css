@@ -62,20 +62,20 @@ li.emoticon div {
     display: flex;
     align-items: center;
 }
-li.emoticon div.first {
+li.emoticon div.first, li.dialogue div.first {
     margin-top: 5px;
 }
 li.emoticon img {
     height: 1.5em;
 }
-li.emoticon span {
-    margin-left: 5px;
+li.emoticon span, li.dialogue span {
+    margin-left: 1em;
 }
-li.emoticon span.down {
+li.emoticon span.down, li.dialogue span.down {
     opacity: 0;
     transition: .1s;
 }
-li.emoticon span.down:hover {
+li.emoticon span.down:hover, li.dialogue span.down:hover {
     cursor: help;
 }
 li.dialogue {

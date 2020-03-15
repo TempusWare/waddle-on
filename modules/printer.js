@@ -52,7 +52,31 @@ export function print(script, viewer, location) {
                         // If dialogue
                         if (!isEmoticon(content)) { 
                             item.classList.add("dialogue");
-                            item.innerHTML += "&emsp;" + content;
+                            let div = document.createElement("div");
+                            item.appendChild(div);
+                            let span = document.createElement("span");
+                            span.innerHTML = content;
+                            div.appendChild(span);
+
+                            if (m === 0) { // Dialogue on first line
+                                div.classList.add("first");
+                            };
+
+                            if (m + 1 < line.content.length) { // Continues further
+                                let arrowSpan = document.createElement("span");
+                                arrowSpan.innerHTML = ("↓ ↓ ↓");
+                                arrowSpan.classList.add("down");
+                                div.appendChild(arrowSpan);
+                                
+                                item.addEventListener("mouseover", function() {
+                                    arrowSpan.style.opacity = "1";
+                                });
+
+                                item.addEventListener("mouseout", function() {
+                                    arrowSpan.style.opacity = "0";
+                                });
+                            };
+
                             item.addEventListener("click", function() {
                                 let temp = document.createElement("textarea");
                                 temp.value = line.content[m];
@@ -62,11 +86,6 @@ export function print(script, viewer, location) {
                                 document.execCommand("copy");
                                 temp.remove();
                             });
-
-                            // Add 'continued' text if the dialogue continues further
-                            /*if (m > 0) {
-                                item.innerHTML = "(CONT'D) " + item.innerHTML;
-                            };*/
                         } 
 
                         // If emoticon
@@ -88,9 +107,11 @@ export function print(script, viewer, location) {
                             let span = document.createElement("span");
                             span.innerHTML = "(" + emoticons[emote] + ")";
                             div.appendChild(span);
+
                             if (m === 0) { // Emoticon on first line
                                 div.classList.add("first");
                             };
+
                             if (m + 1 < line.content.length) { // Continues further
                                 let arrowSpan = document.createElement("span");
                                 arrowSpan.innerHTML = ("↓ ↓ ↓");
@@ -105,11 +126,6 @@ export function print(script, viewer, location) {
                                     arrowSpan.style.opacity = "0";
                                 });
                             };
-
-                            // Add 'continued' text if the dialogue continues further
-                            /*if (m > 0) {
-                                span.innerHTML += " (CONT'D)";
-                            };*/
                         };
 
                         item.classList.add("character-" + (charactersList.indexOf(line.name) + 1));
