@@ -135,7 +135,10 @@ export function print(script, viewer, location) {
 
                 case "title": {
                     let item = document.createElement("li");
-                    item.innerHTML = "<b>" + line.content[0].toUpperCase() + "</b><br>" + line.content[1];
+                    item.innerHTML = "<b>" + line.content[0].toUpperCase() + "</b>";
+                    for (let i = 1; i < line.content.length; i++) {
+                        item.innerHTML += "<br>" + line.content[i];
+                    };
                     item.classList.add("title");
                     viewer.appendChild(item);
                 } break;

@@ -34,7 +34,7 @@ export function interpret(source) {
             statements[l].content = content[0].toUpperCase();
         } else
         // If Title & Credit
-        if (content.length === 2 && isUpperCase(content[0]) && content[1].toLowerCase().startsWith("by ")) {
+        if (content.length >= 2 && isUpperCase(content[0]) && content[1].toLowerCase().startsWith("by ")) {
             statements[l].type = "title";
             statements[l].content = content.clone();
         } else

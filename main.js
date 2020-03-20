@@ -137,8 +137,8 @@ function preview() {
 function convert() {
     var script = encodeURIComponent(JSON.stringify(interpret(textEditor.value)));
     //var script = encodeURIComponent(textEditor.value);
-    var curLoc = window.location.href;
-    //var curLoc = "https://www.078596.xyz/waddleon";
+    var curLoc = window.location.href.split("?")[0];
+
     var url = curLoc.endsWith("/") ? curLoc + "viewer?" + script : curLoc + "/viewer?" + script;
 
     // Copy export url to clipboard
@@ -167,4 +167,71 @@ if (localStorage["backup"] && localStorage.getItem("backup") != "") {
     textEditor.value = localStorage.getItem("backup");
     //console.log("Imported backup");
     preview();
+};
+
+// Interpret script data from url
+{
+    // Retrieve script data from url if any
+    let tempData = window.location.href.toString();
+    if (tempData.includes("?")) {
+        let importScript = confirm("Data for a script was found. Click OK to import into your editor.");
+
+        if (importScript) {
+            var scriptData = decodeURIComponent(tempData.slice(tempData.indexOf("?") + 1, tempData.length));
+            let script = JSON.parse(scriptData);
+
+            let rawScript = "";
+
+            // Interpret script data
+            for (const set in script) {
+                if (script.hasOwnProperty(set)) {
+                    const line = script[set];
+                    switch (line.type) {
+                        case "heading":
+                            rawScript += line.content;
+                            break;
+                            
+                        case "transition":
+                            rawScript += line.content;
+                            break;
+
+                        case "dialogue":
+                            rawScript += line.name + "\n" + line.content[0];
+                            for (let i = 1; i < line.content.length; i++) {
+                                rawScript += "\n" + line.content[i];
+                            };
+                            break;
+
+                        case "title":
+                            rawScript += line.content[0];
+                            for (let i = 1; i < line.content.length; i++) {
+                                rawScript += "\n" + line.content[i];
+                            };
+                            break;
+
+                        case "action":
+                            rawScript += line.content[0];
+                            for (let i = 1; i < line.content.length; i++) {
+                                rawScript += "\n" + line.content[i];
+                            };
+                            break;
+                        
+                        default:
+                            break;
+                    };
+                    rawScript += "\n\n";
+                };
+            };
+
+            // Remove excess \n
+            while (rawScript.endsWith("\n")) {
+                rawScript = rawScript.slice(0, rawScript.length - 2);
+            };
+
+            // Insert into textarea
+            textEditor.value = rawScript;
+            preview();
+        };
+    };
+    
 };
