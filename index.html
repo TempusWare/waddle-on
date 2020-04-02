@@ -29,14 +29,28 @@
             </div>
 
             <div id="tools">
-                <button class="buttons" id="uppercase-button">a->A</button>
-                <button class="buttons" id="lowercase-button">A->a</button>
-                <input type="checkbox" id="replace-case-toggle" title="Toggle case-sensitivity for Find & Replace">
-                <button class="buttons" id="replace-button">Find & Replace</button>
-                <button class="buttons" id="undo-fnr-button">Undo F&R</button>
-                <input type="checkbox" id="auto-preview-toggle" title="Toggle Auto Preview (Live updating script preview)">
-                <button class="buttons" id="preview-button">Preview</button>
-                <button class="buttons" id="convert-button">Export</button>
+                <div class="tool-groups" id="find-and-replace">
+                    <table>
+                        <tr>
+                            <td>Find what:</td>
+                            <td><input type="text" id="find-input"></td>
+                        </tr>
+                        <tr>
+                            <td>Replace with:</td>
+                            <td><input type="text" id="replace-input"></td>
+                        </tr>
+                    </table>
+                    <div>
+                        Match case<input type="checkbox" id="replace-case-toggle">
+                        <button class="buttons" id="replace-button">Replace All</button>
+                        <button class="buttons" id="undo-button">Undo</button>
+                    </div>
+                </div>
+                <div class="tool-groups">
+                    <button class="buttons" id="uppercase-button">a->A</button>
+                    <button class="buttons" id="lowercase-button">A->a</button>
+                </div>
+                <button class="buttons" id="convert-button">Export to<br>TinyURL</button>
             </div>
 
             <div id="format">

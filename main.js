@@ -1,30 +1,39 @@
 import { interpret } from "./modules/interpreter.js";
 import { print } from "./modules/printer.js";
 
-const textEditor = document.getElementById("text-editor");
-const scriptViewer = document.getElementById("viewer-lines");
-const scriptViewerBox = document.getElementById("viewer-box");
-const replaceCaseToggle = document.getElementById("replace-case-toggle");
-const autoPreviewToggle = document.getElementById("auto-preview-toggle");
-//const autoSaveToggle = document.getElementById("auto-save-toggle");
+const textEditor = document.getElementById("text-editor"),
+scriptViewer = document.getElementById("viewer-lines"),
+scriptViewerBox = document.getElementById("viewer-box"),
+findInput = document.getElementById("find-input"), replaceInput = document.getElementById("replace-input"),
+replaceButton = document.getElementById("replace-button"),
+undoButton = document.getElementById("undo-button"),
+replaceCaseToggle = document.getElementById("replace-case-toggle");
 
 document.getElementById("uppercase-button").addEventListener("click", function() {tocase("upper")});
 document.getElementById("lowercase-button").addEventListener("click", function() {tocase("lower")});
-document.getElementById("replace-button").addEventListener("click", replace);
-document.getElementById("undo-fnr-button").addEventListener("click", undoFNR);
-document.getElementById("preview-button").addEventListener("click", preview);
 document.getElementById("convert-button").addEventListener("click", convert);
-//document.getElementById("save-button").addEventListener("click", function() {save(); alert("Your script has been saved to your browser.\nIt'll automatically open in the editor next time you open this tool.")});
+
+var backupScripts = [];
+undoButton.addEventListener("click", undo);
+function undo() {
+    textEditor.value = backupScripts.pop();
+    preview(); save(); lockUndo();
+};
+function lockUndo() {
+    if (backupScripts.length > 0) {
+        undoButton.disabled = false;
+    } else {
+        undoButton.disabled = true;
+    };
+}; lockUndo();
 
 function tocase(newcase) {
-    let startPos = textEditor.selectionStart;
-    let endPos = textEditor.selectionEnd;
-    if (startPos == endPos) {
-        alert("No text was selected!");
-        return;
-    };
-    let script = textEditor.value;
+    let startPos = textEditor.selectionStart, endPos = textEditor.selectionEnd;
+    if (startPos == endPos) {alert("Select text first"); return; };
+
+    let script = textEditor.value; backupScripts.push(script);
     let selection = script.slice(startPos, endPos);
+
     switch (newcase) {
         case "upper":
             var newSelection = selection.toUpperCase();
@@ -34,65 +43,35 @@ function tocase(newcase) {
             var newSelection = selection.toLowerCase();
             break;
     };
-    //console.log(startPos + ", " + endPos + " '" + selection + "'");
-    let preSelection = script.slice(0, startPos);
-    let postSelection = script.slice(endPos, script.length);
+
+    let preSelection = script.slice(0, startPos), postSelection = script.slice(endPos, script.length);
     textEditor.value = preSelection + newSelection + postSelection;
-    preview();
-    save();
+    preview(); save(); lockUndo();
 };
 
-var caseSensitive = true;
-var backupScript = "";
+replaceButton.addEventListener("click", replace);
+var caseSensitive = false;
 function replace() {
-    var findText = prompt("Enter text to find in your script:");
-
-    if (findText != null && findText != "") {
-        backupScript = textEditor.value;
-
-        var replaceText = prompt("Enter text to replace with:");
-
-        let modifier = caseSensitive ? "g" : "gi";
-
-        let regex = new RegExp(findText, modifier);
-        textEditor.value = textEditor.value.replace(regex, replaceText);
-
-        preview();
-        save();
-    } else if (findText != null) {
-        alert("You didn't enter any text to find!");
-    };
+    let findText = findInput.value, replaceText = replaceInput.value,
+    modifier = caseSensitive ? "g" : "gi";
+    if (findText === null || findText === "") {return}; // Stop process if empty findText value
+    backupScripts.push(textEditor.value);
+    let regex = new RegExp(findText, modifier);
+    textEditor.value = textEditor.value.replace(regex, replaceText);
+    preview(); save(); lockUndo();
 };
-
-function undoFNR() {
-    if (backupScript != "") {
-        var goAhead = confirm("Undo last Find & Replace?");
-
-        if (goAhead) {
-            textEditor.value = backupScript;
-            backupScript = "";
-            preview();
-            save();
-        };
+findInput.addEventListener("keyup", lockReplace);
+function lockReplace() {
+    if (findInput.value.length > 0) {
+        replaceButton.disabled = false;
     } else {
-        alert("You haven't used Find & Replace!");
+        replaceButton.disabled = true;
     };
-};
+}; lockReplace();
 
-autoPreviewToggle.checked = true;
-autoPreviewCheck();
-autoPreviewToggle.addEventListener("click", autoPreviewCheck)
-function autoPreviewCheck() {
-    if (autoPreviewToggle.checked) {
-        textEditor.addEventListener("keyup", autopreview);
-    } else {
-        textEditor.removeEventListener("keyup", autopreview);
-    };
-};
-
-replaceCaseToggle.checked = true;
+replaceCaseToggle.checked = false;
 replaceCaseCheck();
-replaceCaseToggle.addEventListener("click", replaceCaseCheck)
+replaceCaseToggle.addEventListener("click", replaceCaseCheck);
 function replaceCaseCheck() {
     if (replaceCaseToggle.checked) {
         caseSensitive = true;
@@ -101,17 +80,7 @@ function replaceCaseCheck() {
     };
 };
 
-/*autoSaveToggle.checked = true;
-autoSaveCheck();
-autoSaveToggle.addEventListener("click", autoSaveCheck)
-function autoSaveCheck() {
-    if (autoSaveToggle.checked) {
-        setInterval(save, 3000);
-    } else {
-        clearInterval(save);
-    };
-};*/
-
+textEditor.addEventListener("keyup", autopreview);
 function autopreview() {
     preview();
     // Scroll to bottom
@@ -136,26 +105,12 @@ function preview() {
 
 function convert() {
     var script = encodeURIComponent(JSON.stringify(interpret(textEditor.value)));
-    //var script = encodeURIComponent(textEditor.value);
+    
     var curLoc = window.location.href.split("?")[0];
-
+    curLoc = curLoc.replace("index.html", "");
     var url = curLoc.endsWith("/") ? curLoc + "viewer?" + script : curLoc + "/viewer?" + script;
 
-    // Copy export url to clipboard
-    let temp = document.createElement("textarea");
-    temp.value = url;
-    document.body.appendChild(temp);
-    temp.select();
-    document.execCommand("copy");
-    temp.remove();
-
-    let useTinyurl = confirm("A link to access the script exclusively via the online viewer has been saved to your clipboard.\n\nTo generate a shortened link that will fit in a Discord message, press OK and you'll be taken to an auto-generated TinyURL result.\nIf you want to do it manually, press Cancel.");
-
-    if (useTinyurl) {
-        // Open and use tinyurl
-        window.open("https://tinyurl.com/create.php?url=" + url);
-    };
-    
+    window.open("https://tinyurl.com/create.php?url=" + url);
 };
 
 textEditor.addEventListener("keyup", save);
