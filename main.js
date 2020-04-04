@@ -11,7 +11,7 @@ replaceCaseToggle = document.getElementById("replace-case-toggle");
 
 document.getElementById("uppercase-button").addEventListener("click", function() {tocase("upper")});
 document.getElementById("lowercase-button").addEventListener("click", function() {tocase("lower")});
-document.getElementById("convert-button").addEventListener("click", convert);
+document.getElementById("share-button").addEventListener("click", share);
 
 var backupScripts = [];
 undoButton.addEventListener("click", undo);
@@ -103,12 +103,12 @@ function preview() {
     };
 };
 
-function convert() {
+function share() {
     var script = encodeURIComponent(JSON.stringify(interpret(textEditor.value)));
     
     var curLoc = window.location.href.split("?")[0];
     curLoc = curLoc.replace("index.html", "");
-    var url = curLoc.endsWith("/") ? curLoc + "viewer?" + script : curLoc + "/viewer?" + script;
+    var url = curLoc.endsWith("/") ? curLoc + "viewer/?" + script : curLoc + "/viewer/?" + script;
 
     window.open("https://tinyurl.com/create.php?url=" + url);
 };
